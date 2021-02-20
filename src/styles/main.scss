@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;800&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: rgb(247, 247, 247);
+}
+
+body, .quote-input {
+    font-family: "Poppins";
+}
+
+.timer {
+    position: absolute;
+    top: 2rem;
+    font-size: 3rem;
+    font-weight: 800;
+}
+
+.container {
+    background-color: white;
+    padding: 1rem;
+    border-radius: .3rem;
+    width: 700px;
+    max-width: 90%;
+
+    .quote-display {
+        margin-bottom: 1rem;
+    }
+
+    .quote-input {
+        background-color: transparent;
+        border: 2px solid rgb(247, 247, 247);
+        outline: none;
+    }
+
+    .quote-input:focus {
+        border-color: rgb(219, 219, 219);
+    }
+}
