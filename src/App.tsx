@@ -6,7 +6,10 @@ interface State {
   typeTest: string;
   words: Array<string>;
   enteredText: string;
-  score: number
+  score: number;
+  started: boolean;
+  startTime: Date | null;
+  wordsPerMinute: number | null;
 }
 
 class App extends Component {
@@ -14,31 +17,58 @@ class App extends Component {
     typeTest: "This is the sentence to type",
     words: [],
     enteredText: "",
-    score: 0
+    score: 0,
+    started: false,
+    startTime: null,
+    wordsPerMinute: null,
   };
 
   componentDidMount() {
     this.setState({ words: this.state.typeTest.split(" ") });
   }
 
+  wordsPerMinute = (charsTyped: number, millis: number): number =>
+    Math.floor(charsTyped / 5 / (millis / 60000));
+
+  checkFinished = (): void => {
+    if (!this.state.words.length) {
+      if (this.state.startTime) {
+        const timeMillis: number =
+          new Date().getTime() - this.state.startTime.getTime();
+        const wpm = this.wordsPerMinute(this.state.typeTest.length, timeMillis);
+        this.setState({ wordsPerMinute: wpm });
+      }
+    }
+  };
+
   onWordChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    if (!this.state.started) {
+      this.setState({ started: true, startTime: new Date() });
+    }
     console.log(e.currentTarget.value);
-    let enteredText = e.currentTarget.value
-    this.setState({ enteredText })
+    let enteredText = e.currentTarget.value;
+    this.setState({ enteredText });
 
     if (enteredText === this.state.words[0]) {
-      this.setState({ score: this.state.score +1})
-      this.setState({ enteredText: "" })
+      this.setState({ score: this.state.score + 1 });
+      this.setState({ enteredText: "" });
+      this.setState({ words: this.state.words.slice(1) }, (): void =>
+        this.checkFinished()
+      );
     }
   };
 
   render() {
     return (
       <div className="App">
-        <h1>Test your typing test</h1>
+        <h1>
+          {this.state.wordsPerMinute
+            ? `${this.state.wordsPerMinute} WPM`
+            : "Test your typing speed"}
+        </h1>
         <div className="timer">0</div>
         <div className="container">
-            <h3>Type the following</h3>
+          <h3>Type the following</h3>
           <div className="quote-display" id="quote-display">
             <h6>{this.state.typeTest}</h6>
           </div>
