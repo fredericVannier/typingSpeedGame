@@ -51,4 +51,8 @@ body, .quote-input {
 .container .quote-input:focus {
   border-color: #dbdbdb;
 }
+
+.container .current-word {
+  color: #0077ff;
+}
 /*# sourceMappingURL=main.css.map */

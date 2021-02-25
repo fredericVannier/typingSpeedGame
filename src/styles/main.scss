@@ -44,4 +44,8 @@ body, .quote-input {
     .quote-input:focus {
         border-color: rgb(219, 219, 219);
     }
+
+    .current-word {
+        color: rgb(0, 119, 255);
+    }
 }

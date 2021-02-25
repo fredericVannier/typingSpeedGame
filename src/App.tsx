@@ -49,7 +49,7 @@ class App extends Component {
     let enteredText = e.currentTarget.value;
     this.setState({ enteredText });
 
-    if (enteredText === this.state.words[0]) {
+    if (enteredText === this.state.words[0] + ' ') {
       this.setState({ score: this.state.score + 1 });
       this.setState({ enteredText: "" });
       this.setState({ words: this.state.words.slice(1) }, (): void =>
@@ -70,7 +70,7 @@ class App extends Component {
         <div className="container">
           <h3>Type the following</h3>
           <div className="quote-display" id="quote-display">
-            <h6>{this.state.typeTest}</h6>
+            <h6>{this.state.words.map(word => word === this.state.words[0] ? <em className="current-word">{word} </em> : word + " ")}</h6>
           </div>
           <input
             id="quoteInput"
