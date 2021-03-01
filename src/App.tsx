@@ -1,6 +1,7 @@
 import { WSAECONNREFUSED } from "constants";
 import React, { ChangeEvent, Component } from "react";
 import "./styles/main.css";
+import WordsList from "./components/WordsList"
 
 interface State {
   typeTest: string;
@@ -14,7 +15,7 @@ interface State {
 
 class App extends Component {
   state: State = {
-    typeTest: "This is the sentence to type",
+    typeTest: " ",
     words: [],
     enteredText: "",
     score: 0,
@@ -23,8 +24,17 @@ class App extends Component {
     wordsPerMinute: null,
   };
 
-  componentDidMount() {
-    this.setState({ words: this.state.typeTest.split(" ") });
+  async componentDidMount() {
+
+    
+    const url = "https://random-word-api.herokuapp.com//word?number=20";
+    const response = await fetch(url);
+    const data = await response.json();
+    //const finalWords = data.map( word => word + " ")
+    //this.setState({typetest: [...finalWords]})
+    this.setState({ words: [...data]});
+    //this.setState({ words: [...finalWords]});
+    console.log("my data", this.state.words);
   }
 
   wordsPerMinute = (charsTyped: number, millis: number): number =>
@@ -35,7 +45,7 @@ class App extends Component {
       if (this.state.startTime) {
         const timeMillis: number =
           new Date().getTime() - this.state.startTime.getTime();
-        const wpm = this.wordsPerMinute(this.state.typeTest.length, timeMillis);
+        const wpm = this.wordsPerMinute(this.state.words.length, timeMillis);
         this.setState({ wordsPerMinute: wpm });
       }
     }
@@ -61,6 +71,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+
+        
         <h1>
           {this.state.wordsPerMinute
             ? `${this.state.wordsPerMinute} WPM`
