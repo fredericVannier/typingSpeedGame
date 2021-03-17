@@ -25,16 +25,10 @@ class App extends Component {
   };
 
   async componentDidMount() {
-
-    
-    const url = "https://random-word-api.herokuapp.com//word?number=20";
+    const url = "https://random-word-api.herokuapp.com//word?number=3";
     const response = await fetch(url);
     const data = await response.json();
-    //const finalWords = data.map( word => word + " ")
-    //this.setState({typetest: [...finalWords]})
-    this.setState({ words: [...data]});
-    //this.setState({ words: [...finalWords]});
-    console.log("my data", this.state.words);
+    this.setState({ words: data});
   }
 
   wordsPerMinute = (charsTyped: number, millis: number): number =>
@@ -46,7 +40,8 @@ class App extends Component {
         const timeMillis: number =
           new Date().getTime() - this.state.startTime.getTime();
         const wpm = this.wordsPerMinute(this.state.words.length, timeMillis);
-        this.setState({ wordsPerMinute: wpm });
+        console.log("WPMMMMM", wpm);
+        this.setState({ wordsPerMinute: wpm }, (): void => console.log('wpm', this.state.wordsPerMinute));
       }
     }
   };
@@ -56,16 +51,19 @@ class App extends Component {
       this.setState({ started: true, startTime: new Date() });
     }
     console.log(e.currentTarget.value);
+    //console.log('start time', this.state.startTime);
     let enteredText = e.currentTarget.value;
     this.setState({ enteredText });
-
+    console.log(this.state.startTime);
+    console.log(this.state.started);
+    
     if (enteredText === this.state.words[0] + ' ') {
       this.setState({ score: this.state.score + 1 });
-      this.setState({ enteredText: "" });
-      this.setState({ words: this.state.words.slice(1) }, (): void =>
-        this.checkFinished()
+      this.setState({ words: this.state.words.slice(1) }, (): void => console.log('updated words', this.state.words)
       );
+      this.setState({ enteredText: "" }, (): void => this.checkFinished());
     }
+    //this.checkFinished();
   };
 
   render() {
